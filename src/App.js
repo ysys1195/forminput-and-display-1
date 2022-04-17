@@ -1,18 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import './index.css'
 
 const App = () => {
+
+ const [title, setTitle] = useState('')
+ const [body, setBody] = useState('')
+ const [category, setCategory] = useState('')
+
  return (
    <>
      <Box sx={{ borderBottom: '1px solid lightgray', paddingBottom: '50px' }}>
        <h1>Post Action List</h1>
        <form>
-         <TextField className='input-form' id='title' label='Title' variant='outlined' />
-         <TextField className='input-form' id='body' label='Body' multiline rows={4} variant='outlined' />
-         <TextField className='input-form' id='category' label='Category' variant='outlined' />
-         <Button className='input-form' variant='contained'>post</Button>
+         <TextField className='input-form' id='title' label='Title' variant='outlined' onChange={e => setTitle(e.target.value)} />
+         <TextField className='input-form' id='body' label='Body' multiline rows={4} variant='outlined' onChange={e => setBody(e.target.value)} />
+         <TextField className='input-form' id='category' label='Category' variant='outlined' onChange={e => setCategory(e.target.value)} />
+         <Button className='input-form' variant='contained' disabled={true}>post</Button>
        </form>
      </Box>
 
