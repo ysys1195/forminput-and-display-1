@@ -8,6 +8,19 @@ const App = () => {
  const [title, setTitle] = useState('')
  const [body, setBody] = useState('')
  const [category, setCategory] = useState('')
+ const [cards, setCards] = useState([])
+ const inputAllForm = title === '' || body === '' || category === ''
+
+ const postAction = e => {
+  e.preventDefault()
+
+  const newCard = { cardTitle: title, cardBody: body, cardCategory: category }
+    setCards([...cards, newCard])
+  }
+
+  useEffect(() => {
+    console.log(cards);
+  }, [cards])
 
  return (
    <>
@@ -17,7 +30,7 @@ const App = () => {
          <TextField className='input-form' id='title' label='Title' variant='outlined' onChange={e => setTitle(e.target.value)} />
          <TextField className='input-form' id='body' label='Body' multiline rows={4} variant='outlined' onChange={e => setBody(e.target.value)} />
          <TextField className='input-form' id='category' label='Category' variant='outlined' onChange={e => setCategory(e.target.value)} />
-         <Button className='input-form' variant='contained' disabled={true}>post</Button>
+         <Button className='input-form' variant='contained' onClick={postAction} disabled={inputAllForm}>post</Button>
        </form>
      </Box>
 
