@@ -20,11 +20,19 @@ const App = () => {
 
   useEffect(() => {
     const addCard = async () => {
-      const newCard = await { cardTitle: title, cardBody: body, cardCategory: category }
-      setCards([...cards, newCard])
+      if (title !== '') {
+        const newCard = await { cardTitle: title, cardBody: body, cardCategory: category }
+        if (cards.length) {
+          setCards([...cards, newCard]);
+        } else {
+          setCards([newCard]);
+        }
+        setTitle('')
+        setBody('')
+        setCategory('')
+      }
     }
     addCard()
-    console.log(cards);
   }, [cardNum])
 
   return (
@@ -41,8 +49,8 @@ const App = () => {
 
       <Box>
         <h1>Action List</h1>
-        {cards.forEach((card) => {
-          <Card sx={{ maxWidth: 500 }}>
+        {cards.map((card, i) => (
+          <Card sx={{ maxWidth: 500, margin: 2 }} key={i}>
             <CardContent>
               <Typography sx={{ fontSize: 20, borderBottom: '1px solid lightgray' }}>
                 {card.cardTitle}
@@ -50,15 +58,15 @@ const App = () => {
               <Typography sx={{ fontSize: 16, padding: 2 }}>
                 {card.cardBody}
               </Typography>
-              <Typography sx={{ fontSize: 12, padding: 2 }}>
-                {card.cardCategory}
+              <Typography sx={{ fontSize: 12, padding: 2, color: '#0040a4' }}>
+                #{card.cardCategory}
               </Typography>
             </CardContent>
             <CardActions>
               <Button color='warning' variant='outlined'>Delete</Button>
             </CardActions>
           </Card>
-        })}
+        ))}
       </Box>
     </>
   )
