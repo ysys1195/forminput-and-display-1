@@ -40,9 +40,9 @@ const App = () => {
       <Box sx={{ borderBottom: '1px solid lightgray', paddingBottom: '50px' }}>
         <h1>Post Action List</h1>
         <form>
-          <TextField className='input-form' id='title' label='Title' variant='outlined' onChange={e => setTitle(e.target.value)} />
-          <TextField className='input-form' id='body' label='Body' multiline rows={4} variant='outlined' onChange={e => setBody(e.target.value)} />
-          <TextField className='input-form' id='category' label='Category' variant='outlined' onChange={e => setCategory(e.target.value)} />
+          <TextField className='input-form' id='title' label='Title' variant='outlined' value={title} onChange={e => setTitle(e.target.value)} />
+          <TextField className='input-form' id='body' label='Body' multiline rows={4} variant='outlined' value={body} onChange={e => setBody(e.target.value)} />
+          <TextField className='input-form' id='category' label='Category' variant='outlined' value={category} onChange={e => setCategory(e.target.value)} />
           <Button className='input-form' variant='contained' onClick={postAction} disabled={inputAllForm}>post</Button>
         </form>
       </Box>
