@@ -6,6 +6,7 @@ import './index.css'
 const App = () => {
 
   const inputAllForm = title === '' || body === '' || category === ''
+  const [cardId, setCardId] = useState(0)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [category, setCategory] = useState('')
@@ -18,22 +19,34 @@ const App = () => {
     setCardNum(cardNum + 1)
   }
 
+  const deleteCard = e => {
+    e.preventDefault()
+ 
+    console.log('delete card');
+  }
+
   useEffect(() => {
-    const addCard = async () => {
-      if (title !== '') {
-        const newCard = await { cardTitle: title, cardBody: body, cardCategory: category }
-        if (cards.length) {
-          setCards([...cards, newCard]);
-        } else {
-          setCards([newCard]);
+    const changeCard = async () => {
+      if (cardNum > cards.length) {
+        if (title !== '') {
+          const numberCardId = setCardId(cardId + 1)
+          const newCard = await { cardId: numberCardId, cardTitle: title, cardBody: body, cardCategory: category }
+          if (cards.length) {
+            setCards([...cards, newCard]);
+          } else {
+            setCards([newCard]);
+          }
+          setTitle('')
+          setBody('')
+          setCategory('')
         }
-        setTitle('')
-        setBody('')
-        setCategory('')
+      } else if (cardNum < cards.length) {
+        console.log('delete');
       }
     }
-    addCard()
+    changeCard()
   }, [cardNum])
+  // 39まで
 
   return (
     <>
@@ -49,8 +62,8 @@ const App = () => {
 
       <Box>
         <h1>Action List</h1>
-        {cards.map((card, i) => (
-          <Card sx={{ maxWidth: 500, margin: 2 }} key={i}>
+        {cards.map((card) => (
+          <Card sx={{ maxWidth: 500, margin: 2 }} key={card.cardId}>
             <CardContent>
               <Typography sx={{ fontSize: 20, borderBottom: '1px solid lightgray' }}>
                 {card.cardTitle}
@@ -63,7 +76,7 @@ const App = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button color='warning' variant='outlined'>Delete</Button>
+              <Button color='warning' variant='outlined' onClick={deleteCard}>Delete</Button>
             </CardActions>
           </Card>
         ))}
