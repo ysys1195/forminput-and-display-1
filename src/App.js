@@ -5,13 +5,16 @@ import './index.css'
 
 const App = () => {
 
-  const inputAllForm = title === '' || body === '' || category === ''
-  const [cardId, setCardId] = useState(0)
+  const inputAllForm = inputCard.title === '' || inputCard.body === '' || inputCard.category === ''
+
+  const [cardId, setCardId] = useState(1)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [category, setCategory] = useState('')
   const [cards, setCards] = useState([])
   const [cardNum, setCardNum] = useState(0)
+  const [deleteCardId, setDeleteCardId] = useState(0)
+  const [inputCard, setInputCard] = useState({ id: 1, title: '', body: '', category: '' })
 
   const postAction = e => {
     e.preventDefault()
@@ -19,46 +22,95 @@ const App = () => {
     setCardNum(cardNum + 1)
   }
 
-  const deleteCard = e => {
+  const deleteCard = (id, e) => {
     e.preventDefault()
+    console.log(id);
  
-    console.log('delete card');
+    setCardNum(cardNum - 1)
   }
 
   useEffect(() => {
     const changeCard = async () => {
       if (cardNum > cards.length) {
         if (title !== '') {
-          const numberCardId = setCardId(cardId + 1)
-          const newCard = await { cardId: numberCardId, cardTitle: title, cardBody: body, cardCategory: category }
+          const newCard = await { cardId: cardId, cardTitle: title, cardBody: body, cardCategory: category }
           if (cards.length) {
             setCards([...cards, newCard]);
           } else {
             setCards([newCard]);
           }
+          setCardId(cardId + 1)
           setTitle('')
           setBody('')
           setCategory('')
         }
       } else if (cardNum < cards.length) {
-        console.log('delete');
+        console.log('↓これがdeleteCardId========');
+        console.log(deleteCardId);
+        const newArray = cards.filter((card) => {
+          return card.cardId !== deleteCardId;
+        })
+        setCards(newArray);
       }
     }
     changeCard()
   }, [cardNum])
-  // 39まで
 
   return (
     <>
       <Box sx={{ borderBottom: '1px solid lightgray', paddingBottom: '50px' }}>
-        <h1>Post Action List</h1>
-        <form>
-          <TextField className='input-form' id='title' label='Title' variant='outlined' value={title} onChange={e => setTitle(e.target.value)} />
-          <TextField className='input-form' id='body' label='Body' multiline rows={4} variant='outlined' value={body} onChange={e => setBody(e.target.value)} />
-          <TextField className='input-form' id='category' label='Category' variant='outlined' value={category} onChange={e => setCategory(e.target.value)} />
-          <Button className='input-form' variant='contained' onClick={postAction} disabled={inputAllForm}>post</Button>
-        </form>
-      </Box>
+       <h1>Post Action List</h1> カード枚数：{cardNum}
+       <form>
+         <TextField
+           className='input-form'
+           id='title'
+           label='Title'
+           variant='outlined'
+           value={inputCard.title}
+           onChange={e => setInputCard(
+             {
+               id: inputCard.id,
+               title: e.target.value,
+               body: inputCard.body,
+               category: inputCard.category
+             }
+           )}
+         />
+         <TextField
+           className='input-form'
+           id='body'
+           label='Body'
+           multiline
+           rows={4}
+           variant='outlined'
+           value={inputCard.body}
+           onChange={e => setInputCard(
+             {
+               id: inputCard.id,
+               title: inputCard.title,
+               body: e.target.value,
+               category: inputCard.category
+             }
+           )}
+         />
+         <TextField
+           className='input-form'
+           id='category'
+           label='Category'
+           variant='outlined'
+           value={inputCard.category}
+           onChange={e => setInputCard(
+             {
+               id: inputCard.id,
+               title: inputCard.title,
+               body: inputCard.body,
+               category: e.target.value
+             }
+           )}
+         />
+         <Button className='input-form' variant='contained' onClick={postAction} disabled={inputAllForm}>post</Button>
+       </form>
+     </Box>
 
       <Box>
         <h1>Action List</h1>
@@ -76,7 +128,7 @@ const App = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button color='warning' variant='outlined' onClick={deleteCard}>Delete</Button>
+              <Button color='warning' variant='outlined' onClick={(e) => deleteCard(card.cardId, e)}>Delete</Button>
             </CardActions>
           </Card>
         ))}
